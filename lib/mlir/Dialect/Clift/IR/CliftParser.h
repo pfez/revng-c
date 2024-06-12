@@ -150,8 +150,8 @@ ObjectT parseCompositeType(AsmParser &Parser, const size_t MinSubobjects) {
 
     if (mlir::failed(Subobjects)) {
       Parser.emitError(Parser.getCurrentLocation(),
-                       "failed to parse class type parameter 'fields' "
-                       "which is to be a "
+                       "in type with ID " + std::to_string(ID) +": failed to "
+                       "parse class type parameter 'fields' which is to be a "
                        "`llvm::ArrayRef<mlir::clift::FieldAttr>`");
     }
 

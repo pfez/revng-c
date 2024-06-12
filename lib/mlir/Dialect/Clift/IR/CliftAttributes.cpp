@@ -2,6 +2,8 @@
 // This file is distributed under the MIT License. See LICENSE.md for details.
 //
 
+#pragma clang optimize off
+
 #include <set>
 
 #include "llvm/ADT/ScopeExit.h"
@@ -86,10 +88,15 @@ mlir::LogicalResult FieldAttr::verify(EmitErrorType EmitError,
                                       uint64_t Offset,
                                       clift::ValueType ElementType,
                                       llvm::StringRef Name) {
-  if (not isObjectType(ElementType))
-    return EmitError() << "Struct and union field types must be object types.";
-  if (not isCompleteType(ElementType))
-    return EmitError() << "Struct and union field types must be complete.";
+  if (not isObjectType(ElementType)) {
+    return EmitError() << "Struct and union field types must be object types. "
+      << "Field at offset " << Offset << " is not.";
+  }
+
+  if (not isCompleteType(ElementType)) {
+    return EmitError() << "Struct and union field types must be complete. "
+      << "Field at offset " << Offset << " is not.";
+  }
 
   return mlir::success();
 }
